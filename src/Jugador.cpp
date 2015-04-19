@@ -1,18 +1,18 @@
-#include "Jugador.hpp"
+#include "Usuario.hpp"
 
-Jugador::Jugador(int* idJugadorCons,std::string* nicknameCons,
-      int* lvlJugador, int* vida, int*vidaMax,double* lon, double* lati){
+Usuario::Usuario(int* idUsuarioCons,std::string* nicknameCons,
+      int* lvlUsuario, int* vida, int*vidaMax,double* lon, double* lati){
         
-        idJugador = *idJugadorCons; 
+        idUsuario = *idUsuarioCons; 
         nickname = *nicknameCons; 
-        nivelJudador = *lvlJugador; 
-        vidaJudador = *vida; 
+        nivelUsuario = *lvlUsuario; 
+        vidaUsuario = *vida; 
         vidaMaxUsuario = *vidaMax; 
         longitud = *lon; 
         latitud = *lati; 
         
     } // Constructor
     
-int Jugador::getIdJugador(){
-        return idJugador;
+int Usuario::getIdUsuario(){
+        return idUsuario;
     }
