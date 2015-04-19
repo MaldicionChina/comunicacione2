@@ -16,6 +16,8 @@ class PosicionUsuario : public Posicion {
     PosicionUsuario(double* lat,double* lon ,int* id ); 
     // PosicionUsuario();
     void getPosicionUsuarioJson(std::string*);
+
+    bool setPosicionUsuarioJson(Json::Value*);
     	
     };
 

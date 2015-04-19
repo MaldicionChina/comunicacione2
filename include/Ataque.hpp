@@ -1,5 +1,5 @@
-#ifndef JUGADOR_HPP
-#define	JUGADOR_HPP
+#ifndef ATAQUE_HPP
+#define	ATAQUE_HPP
 
 
 class Ataque {
@@ -9,6 +9,7 @@ class Ataque {
     
     public:
 
-   Ataque(int* atacado, int* lati);//Constructor de la clase
+   Ataque(int* atacado, int*);//Constructor de la clase
 
 };
+#endif

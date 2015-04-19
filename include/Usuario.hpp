@@ -13,9 +13,12 @@ private:
     int nivelUsuario; // Nivel en el juego del Usuario
     int vidaUsuario; // Vida actual de usuario 
     int vidaMaxUsuario; // Vida total que puede tener el usuario; varia de acuerdo al nivel
-    
+    int posX; // Indice X para la posición en la cuadricula
+    int posY; // Indice Y para lara posición en la cuadricula
     double longitud; // Dato correspondiente e la longitud de la pocisión del usuario
     double latitud; // Dato correspondiente e la latitud de la pocisión del usuario
+    
+    const std::string nombreClase = "Usuario";
     
 public:
     Usuario(int* idUsuarioCons,std::string* nicknameCons,
@@ -26,18 +29,18 @@ public:
     
     int getIdUsuario(); // Obtener el id del Usuario
 
-    bool usuarioToJson();
-
+    bool usuarioToJson(std::string* usuarioJson);
+    PosicionUsuario* posUsuario; 
     // Atributo publico ya que le objeto Posicion Usuario tiene el objeto 
     // PosicionUsario tiene el meteodo para convertir a Json
-    PosicionUsuario* posUsuario; 
+    
 
     /*Convierte el idUsuario, longitud y latitud a Json
     Devuelve por el parametro el archivo Json
     retorna bool para verificar que se realizó la conversión sin promeblas
     Retorna el id, latitud y longitud
     */
-    bool getPosUsuarioJson(std::string*);
+    bool getPosUsuarioJson(std::string* posJson);
 };
 
 

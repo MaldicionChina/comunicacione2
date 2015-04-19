@@ -14,10 +14,18 @@
   #define sleep(n)    Sleep(n)
 #endif
 
+// 3 6.2652965,-75.5714428
+// 1 6.2706908,-75.5699971
+// 2 6.2695098,-75.5666914
+// 4 6.2648545,-75.5676569,21
 
-int main () {
+
+int main (int argc, char *argv[]) {
 
   std::string replyServer ="Ok";
+  Json::Value mensajeCliente;
+
+
   
   //Prepare our context and socket
   zmq::context_t context (1);
@@ -34,6 +42,17 @@ int main () {
       socket.recv (&request);
 	    std::string rpl = std::string(static_cast<char*>(request.data()), request.size()); // COnversión de message_t a string
       std::cout << rpl  << std::endl;
+
+
+      Json::Reader readerJson;
+      // Se realiza la conversión del archivo Json a Objeto 
+      if(readerJson.parse(rpl,mensajeCliente)) // Se verifica que se realice correctamente la conversion
+      {
+          std::cout  << "Error en la conversión de documento Json a Objeto Json\n"
+               << readerJson.getFormattedErrorMessages();
+      }
+      
+      std::cout << "El objeto es de tipo: "<< mensajeCliente.get("IdObjecto", "Not Found" ).asString() << std::endl;
 
       //  Do some 'work'
       //        sleep(1);

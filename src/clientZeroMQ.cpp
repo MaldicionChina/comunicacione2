@@ -11,7 +11,7 @@
 #include <json/json.h>
 #include <sstream>  
 
-int main ()
+int main (int argc, char *argv[])
 {
 
 
@@ -23,14 +23,15 @@ int main ()
 	int nivelJudador = 3; 
 	int vidaJudador = 100; 
 	int vidaMaxUsuario = 100; 
-	double longitud = 3.4; 
-	double latitud = 4.5; 
+	double longitud = 6.244747; 
+	double latitud = -75.574828; 
   Usuario* jugaa = new Usuario(&idJugador,&nombreJugador,&nivelJudador,&vidaJudador
     	,&vidaMaxUsuario,&longitud,&latitud);
 
   std::cout << "ID jugador: "<< jugaa->getIdUsuario() << std::endl;
 
-  jugaa->posUsuario->getPosicionUsuarioJson(&json_output); // Se obtiene el string json del usuario
+  jugaa->usuarioToJson(&json_output); // Se obtiene el string json del usuario
+  // jugaa->posUsuario->getPosicionUsuarioJson(&json_output);
   std::stringstream lineStream(json_output); // Conversión de string a stringstreamer para enviarlo por la red
 
   std::cout << "Json Posicion Usuario"<< json_output << std::endl;
@@ -51,7 +52,7 @@ int main ()
 
   // Se recibe el mensaje del servidor
   socket.recv (&reply);
-  std::string rpl = std::string(static_cast<char*>(reply.data()), reply.size());
+  std::string rpl = std::string(static_cast<char*>(reply.data()), reply.size()); // COnversión de message_t a string
   std::cout << rpl.data() << std::endl;
 
   // zmq_close(socket);
