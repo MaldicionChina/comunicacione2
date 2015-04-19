@@ -10,14 +10,21 @@
 class PosicionUsuario : public Posicion {
     private:
         int usuario_id;
+        const std::string nombreClase="posUsuario";
     	
    
     public:
     PosicionUsuario(double* lat,double* lon ,int* id ); 
+    PosicionUsuario(std::string*); // Cosntructor a partir de un documento Json en formato string
     // PosicionUsuario();
     void getPosicionUsuarioJson(std::string*);
 
     bool setPosicionUsuarioJson(Json::Value*);
+
+    bool jsonToPosicionUsuario(Json::Value*);
+
+    double getLatitud();
+    double getLongitud();
     	
     };
 

@@ -7,6 +7,7 @@
 #include <iostream>
 #include <json/json.h>
 #include <sstream>
+#include "Usuario.hpp"
 #ifndef _WIN32
   #include <unistd.h>
 #else
@@ -25,12 +26,12 @@ int main (int argc, char *argv[]) {
   std::string replyServer ="Ok";
   Json::Value mensajeCliente;
 
-
-  
   //Prepare our context and socket
   zmq::context_t context (1);
   zmq::socket_t socket (context, ZMQ_REP);
   socket.bind ("tcp://*:5555");
+
+  
   
   int count = 0;
   std::cout << "Listen in port 5555" << std::endl;
@@ -41,18 +42,23 @@ int main (int argc, char *argv[]) {
       //  Espera por algún mensaje de los usuarios
       socket.recv (&request);
 	    std::string rpl = std::string(static_cast<char*>(request.data()), request.size()); // COnversión de message_t a string
-      std::cout << rpl  << std::endl;
+      // std::cout << rpl  << std::endl;
 
-
+      Usuario user(&rpl);
       Json::Reader readerJson;
       // Se realiza la conversión del archivo Json a Objeto 
-      if(readerJson.parse(rpl,mensajeCliente)) // Se verifica que se realice correctamente la conversion
+      if(!readerJson.parse(rpl,mensajeCliente)) // Se verifica que se realice correctamente la conversion
       {
           std::cout  << "Error en la conversión de documento Json a Objeto Json\n"
                << readerJson.getFormattedErrorMessages();
       }
       
-      std::cout << "El objeto es de tipo: "<< mensajeCliente.get("IdObjecto", "Not Found" ).asString() << std::endl;
+      // std::cout << "Usuario  "<< mensajeCliente.get("nickName", "Not Found" ).asString() 
+      //           << " conectado" << std::endl;
+
+      std::cout << "Usuario  "<< user.getNickName() << " conectado desde" << std::endl 
+                << "Latitud: "<< user.getLatitud() << " Longitud: "<< user.getLongitud()<< std::endl;
+
 
       //  Do some 'work'
       //        sleep(1);
