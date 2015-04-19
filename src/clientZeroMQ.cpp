@@ -7,7 +7,9 @@
 #include <string>
 #include <iostream>
 #include "Usuario.hpp"
+#include "PosicionUsuario.hpp"
 #include <json/json.h>
+#include <sstream>  
 
 int main ()
 {
@@ -18,34 +20,48 @@ int main ()
 	int vidaMaxUsuario = 100; 
 	double longitud = 3.4; 
 	double latitud = 4.5; 
-    Usuario* jugaa = new Usuario(&idJugador,&nombreJugador,&nivelJudador,&vidaJudador
+  Usuario* jugaa = new Usuario(&idJugador,&nombreJugador,&nivelJudador,&vidaJudador
     	,&vidaMaxUsuario,&longitud,&latitud);
 
-    std::cout << "ID jugador: "<< jugaa->getIdUsuario() << std::endl;
+  size_t tamanoMensajeJson = 0;
 
-    Json::Value root; 
- 
-    
-   	// Prepare our context and socket
-   // 	zmq::context_t context (1);
-   // 	zmq::socket_t socket (context, ZMQ_REQ);
+  std::cout << "ID jugador: "<< jugaa->getIdUsuario() << std::endl;
 
-   // 	std::cout << "Connecting to hello world server…" << std::endl;
-   // 	socket.connect ("tcp://localhost:5555");
+  // Prueba Json
+  // Json::Value root;   // starts as "null"; will contain the root value after parsing
+  // Json::FastWriter writer;
 
-   // //  Do 10 requests, waiting each time for a response
-   // 	for (int request_nbr = 0; request_nbr != 10; request_nbr++) {
-   //     zmq::message_t request (6);
-   //     memcpy ((void *) request.data (), "Hello", 5);
-   //     std::cout << "Sending Hello " << request_nbr << "…" << std::endl;
-   //     socket.send (request);
+  // root["IdObjecto"] = 1;
+
+  std::string json_output;
+  jugaa->posUsuario->getPosicionUsuarioJson(&json_output);
+
+  std::stringstream lineStream(json_output);
+  std::cout << "Json Pos "<< json_output << std::endl;
+  // Prepare our context and socket
+  zmq::context_t context (1);
+  zmq::socket_t socket (context, ZMQ_REQ);
+
+  std::cout << "Connecting to hello world server…" << std::endl;
+  socket.connect ("tcp://localhost:5555");
+  // tamanoMensajeJson = json_output.length();
+  // zmq::message_t request (tamanoMensajeJson);
+  // memcpy ((void *) request.data (), json_output, tamanoMensajeJson);
+  zmq::message_t request((void*)lineStream.str().c_str(), lineStream.str().size()+1, NULL);
+  std::cout << "Sending Hello " << (const char*)request.data()<< "…" << std::endl;
+  socket.send (request);
 
    //     //  Get the reply.
-   //     zmq::message_t reply;
-   //     socket.recv (&reply);
-   //     std::cout << "Received World " << request_nbr << std::endl;
-   // 	}
-   
-    delete jugaa;
-    return 0;
+  zmq::message_t reply;
+  socket.recv (&reply);
+  std::cout << "Received World " << std::endl;
+  // 	}
+  // zmq_close(socket);
+  // zmq_term(context);
+
+  zmq_close(socket);
+  zmq_ctx_destroy(context);
+
+  delete jugaa;
+  return 0;
 }

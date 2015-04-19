@@ -28,19 +28,19 @@ int main () {
         zmq::message_t request;
 
         //  Wait for next request from client
-        socket.recv (&request);
-	std::string rpl = std::string(static_cast<char*>(request.data()), request.size());
-        std::cout << rpl  << std::endl;
+      socket.recv (&request);
+	    std::string rpl = std::string(static_cast<char*>(request.data()), request.size());
+      std::cout << rpl  << std::endl;
 
         //  Do some 'work'
 //        sleep(1);
 
 //         Send reply back to client
-        zmq::message_t reply (5);
-        memcpy ((void *) reply.data (), "0", 1);
+      zmq::message_t reply (5);
+      memcpy ((void *) reply.data (), "0", 1);
 	
-        socket.send (reply);
-	count = count + 1;
+      socket.send (reply);
+      count = count + 1;
     }
     return 0;
 }
