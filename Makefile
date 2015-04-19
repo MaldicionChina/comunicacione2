@@ -23,7 +23,7 @@ serverZMQ: $(SRC)/serverZeroMQ.cpp
 	$(CC) $< -o $@ $(LIBS)
 
 # Se compila el progrema cliente	
-clientZMQ: $(SRC)/clientZeroMQ.cpp libUsuario.o libUsuario.so
+clientZMQ: $(SRC)/clientZeroMQ.cpp libUsuario.so libJson.so
 	$(CC) $(INCLUDE) $< -o $(BIN)/$@ $(LIBS)
 
 
@@ -52,4 +52,4 @@ clean:
 	rm -f $(LIB)/*.so 
 	rm -f $(BIN)/*
 
-.PHONY: libUsuario.so libUsuario.o clientZMQ serverZMQ exportar_lib_paht 
+.PHONY: libUsuario.so libUsuario.o clientZMQ serverZMQ exportar_lib_paht libJson.so libJson.o
