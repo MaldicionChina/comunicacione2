@@ -17,16 +17,17 @@ CC:= g++ -std=c++11
 #%.o:%.c
 #	$(CC) -c $< -o $@
 
-all: serverZMQ clientZMQ ./exportar_lib_path
+all: makeLibs serverZMQ clientZMQ ./exportar_lib_path
 	@./export_lib_path.sh 
 
-serverZMQ: $(SRC)/serverZeroMQ.cpp
-	$(CC) $< -o $(BIN)/$@ $(LIBS)
-
-# Se compila el progrema cliente	
-clientZMQ: $(SRC)/clientZeroMQ.cpp libPosicion.o libPosicionUsuario.o  libUsuario.o libJson.o libPosicion.so libPosicionUsuario.so libUsuario.so libJson.so
+serverZMQ: $(SRC)/serverZeroMQ.cpp makeLibs
 	$(CC) $(INCLUDE) $< -o $(BIN)/$@ $(LIBS)
 
+# Se compila el progrema cliente	
+clientZMQ: $(SRC)/clientZeroMQ.cpp makeLibs
+	$(CC) $(INCLUDE) $< -o $(BIN)/$@ $(LIBS)
+
+makeLibs: libPosicion.o libPosicionUsuario.o  libUsuario.o libJson.o libPosicion.so libPosicionUsuario.so libUsuario.so libJson.so
 
 #Como se usa una libería compartida y no se encuentra en los paths
 #estandar en necesario esportar la variable de entorno LD_LIBRARY_PATH

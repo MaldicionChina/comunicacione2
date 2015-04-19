@@ -5,18 +5,21 @@
 #include <zmq.hpp>
 #include <string>
 #include <iostream>
+#include <json/json.h>
+#include <sstream>
 #ifndef _WIN32
-#include <unistd.h>
+  #include <unistd.h>
 #else
-#include <windows.h>
-
-#define sleep(n)    Sleep(n)
+  #include <windows.h>
+  #define sleep(n)    Sleep(n)
 #endif
 
 
 int main () {
+
+  std::string replyServer ="Ok";
   
-  //  Prepare our context and socket
+  //Prepare our context and socket
   zmq::context_t context (1);
   zmq::socket_t socket (context, ZMQ_REP);
   socket.bind ("tcp://*:5555");
@@ -25,19 +28,21 @@ int main () {
   std::cout << "Listen in port 5555" << std::endl;
   
   while (true) {
-        zmq::message_t request;
+      zmq::message_t request;
 
-        //  Wait for next request from client
+      //  Espera por algún mensaje de los usuarios
       socket.recv (&request);
-	    std::string rpl = std::string(static_cast<char*>(request.data()), request.size());
+	    std::string rpl = std::string(static_cast<char*>(request.data()), request.size()); // COnversión de message_t a string
       std::cout << rpl  << std::endl;
 
-        //  Do some 'work'
-//        sleep(1);
+      //  Do some 'work'
+      //        sleep(1);
 
-//         Send reply back to client
-      zmq::message_t reply (5);
-      memcpy ((void *) reply.data (), "0", 1);
+      //Responde al mensaje de los usuarios
+      std::stringstream lineStream(replyServer);
+
+      zmq::message_t reply ((void*)lineStream.str().c_str(), lineStream.str().size()+1, NULL);
+      // memcpy ((void *) reply.data (), "0", 1);
 	
       socket.send (reply);
       count = count + 1;

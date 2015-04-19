@@ -13,6 +13,11 @@
 
 int main ()
 {
+
+
+  std::string json_output; // Varaible para almacenar el string json resultante
+  zmq::message_t reply;    //Variable para almacenar la respuesta del servidor
+
 	std::string nombreJugador = "Hola";
 	int idJugador = 5; 
 	int nivelJudador = 3; 
@@ -23,44 +28,34 @@ int main ()
   Usuario* jugaa = new Usuario(&idJugador,&nombreJugador,&nivelJudador,&vidaJudador
     	,&vidaMaxUsuario,&longitud,&latitud);
 
-  size_t tamanoMensajeJson = 0;
-
   std::cout << "ID jugador: "<< jugaa->getIdUsuario() << std::endl;
 
-  // Prueba Json
-  // Json::Value root;   // starts as "null"; will contain the root value after parsing
-  // Json::FastWriter writer;
+  jugaa->posUsuario->getPosicionUsuarioJson(&json_output); // Se obtiene el string json del usuario
+  std::stringstream lineStream(json_output); // Conversión de string a stringstreamer para enviarlo por la red
 
-  // root["IdObjecto"] = 1;
+  std::cout << "Json Posicion Usuario"<< json_output << std::endl;
 
-  std::string json_output;
-  jugaa->posUsuario->getPosicionUsuarioJson(&json_output);
-
-  std::stringstream lineStream(json_output);
-  std::cout << "Json Pos "<< json_output << std::endl;
-  // Prepare our context and socket
+  // Se prepara el contexto y el socket para iniciar la comunicación con el servidor
   zmq::context_t context (1);
-  zmq::socket_t socket (context, ZMQ_REQ);
+  zmq::socket_t socket (context, ZMQ_REQ); // socket de tipo REQUEST
 
   std::cout << "Connecting to hello world server…" << std::endl;
-  socket.connect ("tcp://localhost:5555");
-  // tamanoMensajeJson = json_output.length();
-  // zmq::message_t request (tamanoMensajeJson);
-  // memcpy ((void *) request.data (), json_output, tamanoMensajeJson);
+  socket.connect ("tcp://localhost:5555"); // el socket se connecta
+
+  // Se hace la conversión de stringstreamer a message_t(formato que acepta zmq) para enviarlo por red
   zmq::message_t request((void*)lineStream.str().c_str(), lineStream.str().size()+1, NULL);
+
   std::cout << "Sending Hello " << (const char*)request.data()<< "…" << std::endl;
+  // Se envia el mensaje
   socket.send (request);
 
-   //     //  Get the reply.
-  zmq::message_t reply;
+  // Se recibe el mensaje del servidor
   socket.recv (&reply);
-  std::cout << "Received World " << std::endl;
-  // 	}
-  // zmq_close(socket);
-  // zmq_term(context);
+  std::string rpl = std::string(static_cast<char*>(reply.data()), reply.size());
+  std::cout << rpl.data() << std::endl;
 
-  zmq_close(socket);
-  zmq_ctx_destroy(context);
+  // zmq_close(socket);
+  // zmq_ctx_destroy(context);
 
   delete jugaa;
   return 0;
