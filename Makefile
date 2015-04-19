@@ -4,7 +4,7 @@ SRC:=./src
 INC:=./include
 BIN:=./bin
 SHELL := /bin/sh
-LIBS:= -L$(LIB) -lzmq -lJugador 
+LIBS:= -L$(LIB) -lzmq -lUsuario -lJson
 INCLUDE:= -I$(INC)
 EXPORT_PATH:=
 CC:= g++ -std=c++11 
@@ -23,7 +23,7 @@ serverZMQ: $(SRC)/serverZeroMQ.cpp
 	$(CC) $< -o $@ $(LIBS)
 
 # Se compila el progrema cliente	
-clientZMQ: $(SRC)/clientZeroMQ.cpp libJugador.o libJugador.so
+clientZMQ: $(SRC)/clientZeroMQ.cpp libUsuario.o libUsuario.so
 	$(CC) $(INCLUDE) $< -o $(BIN)/$@ $(LIBS)
 
 
@@ -34,15 +34,22 @@ exportar_lib_path: ./export_lib_path.sh
 	@./export_lib_path.sh 
 
 # Se crea el  codigio objeto para la librería
-libJugador.o: $(SRC)/Jugador.cpp ./include/Jugador.hpp
+libUsuario.o: $(SRC)/Usuario.cpp $(INC)/Usuario.hpp
 	$(CC) $(INCLUDE) -c -fPIC $< -o $(LIB)/$@ 
 
-#Se coge el codigo objeto y se compila para que sea una libreria compartida
-libJugador.so: $(LIB)/libJugador.o libJugador.o
+libJson.o: $(SRC)/jsoncpp.cpp $(INC)/json/json.h
+	$(CC) $(INCLUDE) -c -fPIC $< -o $(LIB)/$@ 
+
+libJson.so: $(LIB)/libJson.o libJson.o
 	$(CC) -shared $<  -o $(LIB)/$@
 
-clean: serverZMQ
+#Se coge el codigo objeto y se compila para que sea una libreria compartida
+libUsuario.so: $(LIB)/libUsuario.o libUsuario.o
+	$(CC) -shared $<  -o $(LIB)/$@
+
+clean: 
 	rm -f $(LIB)/*.o 
 	rm -f $(LIB)/*.so 
+	rm -f $(BIN)/*
 
-.PHONY: libJugador.so libJugador.o clientZMQ serverZMQ exportar_lib_paht 
+.PHONY: libUsuario.so libUsuario.o clientZMQ serverZMQ exportar_lib_paht 
