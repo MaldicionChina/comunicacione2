@@ -26,10 +26,7 @@ public:
       int* lvlUsuario, int* vida, int*vidaMax,double* lon, double* lati); // Constructor  
 
     Usuario(std::string*); // Constructor a partir de un documento Json en formato string
-
-    // Usuario(int* idUsuarioCons,std::string* nicknameCons,
-    //   int* lvlUsuario, int* vida, int*vidaMax,PosicionUsuario* posuser);  // COnstructor que recibe objeto PosicionUsuario
-    
+ 
     int getIdUsuario(); // Obtener el id del Usuario
     std::string getNickName();
     double getLatitud();
@@ -40,14 +37,6 @@ public:
     double getPosUsuario();
     // Atributo publico ya que le objeto Posicion Usuario tiene el objeto 
     // PosicionUsario tiene el meteodo para convertir a Json
-    
-
-    /*Convierte el idUsuario, longitud y latitud a Json
-    Devuelve por el parametro el archivo Json
-    retorna bool para verificar que se realizó la conversión sin promeblas
-    Retorna el id, latitud y longitud
-    */
-    bool getPosUsuarioJson(std::string* posJson);
 };
 
 

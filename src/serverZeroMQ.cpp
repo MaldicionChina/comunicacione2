@@ -1,7 +1,4 @@
  
-// autor: Alexis Rodríguez Gutiérrez 
-// Prueba Listen Server con C++ y ZeroMQ
-
 #include <zmq.hpp>
 #include <string>
 #include <iostream>

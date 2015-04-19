@@ -1,8 +1,3 @@
-//
-//  Hello World client in C++
-//  Connects REQ socket to tcp://localhost:5555
-//  Sends "Hello" to server, expects "World" back
-//
 #include <zmq.hpp>
 #include <string>
 #include <iostream>
