@@ -6,7 +6,7 @@
 #include <zmq.hpp>
 #include <string>
 #include <iostream>
-#include "Jugador.hpp"
+#include "Usuario.hpp"
 #include <json/json.h>
 
 int main ()
@@ -18,10 +18,10 @@ int main ()
 	int vidaMaxUsuario = 100; 
 	double longitud = 3.4; 
 	double latitud = 4.5; 
-    Jugador* jugaa = new Jugador(&idJugador,&nombreJugador,&nivelJudador,&vidaJudador
+    Usuario* jugaa = new Usuario(&idJugador,&nombreJugador,&nivelJudador,&vidaJudador
     	,&vidaMaxUsuario,&longitud,&latitud);
 
-    std::cout << "ID jugador: "<< jugaa->getIdJugador() << std::endl;
+    std::cout << "ID jugador: "<< jugaa->getIdUsuario() << std::endl;
 
     Json::Value root; 
  
