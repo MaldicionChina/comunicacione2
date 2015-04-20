@@ -1,19 +1,6 @@
 #include "Usuario.hpp"
 
-Usuario::Usuario(int* idUsuarioCons,std::string* nicknameCons,
-      int* lvlUsuario, int* vida, int*vidaMax,double* lon, double* lati){
-        
-        idUsuario = *idUsuarioCons; 
-        nickName = *nicknameCons; 
-        nivelUsuario = *lvlUsuario; 
-        vidaUsuario = *vida; 
-        vidaMaxUsuario = *vidaMax; 
-        // longitud = *lon; 
-        // latitud = *lati; 
-        posUsuario = new PosicionUsuario(lon,lati,idUsuarioCons);
-        
-    } // Constructor
-    
+  
 int Usuario::getIdUsuario(){
         return idUsuario;
     }
@@ -30,27 +17,34 @@ double Usuario::getLongitud(){
         return posUsuario->getLongitud();
 }
 
-// realiza la conversión del Usuario a objeto Json
-bool Usuario::usuarioToJson(std::string* usuarioJson){
-    Json::Value root;  // Objeto Json 
-    Json::FastWriter writer; // Conversor de objeto Json a formato string 
-    std::string posJson;
+bool Usuario::getPosUsuarioJson(std::string* posJ){
 
-    root["idObjecto"] = nombreClase;
-    root["idUsuario"] = idUsuario;
-    root["nickName"] = nickName;
-    root["nivelUsuario"] = nivelUsuario;
-    root["vidaUsuario"] = vidaUsuario;
-    root["vidaMaxUsuario"] = vidaMaxUsuario;
-    // root["longitud"] = longitud;
-    // root["latitud"] = latitud;
-    posUsuario->getPosicionUsuarioJson(&posJson);
-    root["posUsuario"] = posJson;
-
-    *usuarioJson = writer.write(root);
+    posUsuario->getPosicionUsuarioJson(posJ);
 
     return true;
 }
+std::string Usuario::getTokenUsuario(){
+    return token;
+}
+
+void Usuario::setTokenusuario(std::string* tok){
+    token = *tok;
+}
+
+
+Usuario::Usuario(int* idUsuarioCons,std::string* nicknameCons,
+      int* lvlUsuario, int* vida, int*vidaMax,double* lon, double* lati){
+        
+        idUsuario = *idUsuarioCons; 
+        nickName = *nicknameCons; 
+        nivelUsuario = *lvlUsuario; 
+        vidaUsuario = *vida; 
+        vidaMaxUsuario = *vidaMax; 
+        // longitud = *lon; 
+        // latitud = *lati; 
+        posUsuario = new PosicionUsuario(lon,lati,idUsuarioCons);
+        
+    } // Constructor
 
 Usuario::Usuario(std::string* rpl)
 {
@@ -73,19 +67,32 @@ Usuario::Usuario(std::string* rpl)
     // latitud = usuario.get("idUsuario", "Not Found" ).asString(); 
     posJson = usuario.get("posUsuario", "Not Found" ).asString(); 
     posUsuario = new PosicionUsuario(&posJson);
+    token = usuario.get("token", "null" ).asString();
+} // constructor
+
+
+// realiza la conversión del Usuario a objeto Json
+bool Usuario::usuarioToJson(std::string* usuarioJson){
+    Json::Value root;  // Objeto Json 
+    Json::FastWriter writer; // Conversor de objeto Json a formato string 
+    std::string posJson;
+
+    // root["idObjecto"] = nombreClase;
+    root["idUsuario"] = idUsuario;
+    root["nickName"] = nickName;
+    root["nivelUsuario"] = nivelUsuario;
+    root["vidaUsuario"] = vidaUsuario;
+    root["vidaMaxUsuario"] = vidaMaxUsuario;
+    // root["longitud"] = longitud;
+    // root["latitud"] = latitud;
+    posUsuario->getPosicionUsuarioJson(&posJson);
+    root["posUsuario"] = posJson;
+    root["token"] = token;
+
+    *usuarioJson = writer.write(root);
+
+    return true;
 }
 
 
-// bool Usuario::getPosUsuarioJson(std::string* posJson){
 
-//     Json::Value root;   // starts as "null"; will contain the root value after parsing
-//     Json::FastWriter writer;
-//     root["IdObjecto"] = "posUsuario";
-//     root["IdUsuario"] = idUsuario;
-//     root["longitud"] = longitud;
-//     root["latitud"] = latitud;
-
-//     *posJson = writer.write(root);
-
-//     return true;
-// }

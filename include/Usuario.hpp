@@ -18,6 +18,7 @@ private:
     // double longitud; // Dato correspondiente e la longitud de la pocisión del usuario
     // double latitud; // Dato correspondiente e la latitud de la pocisión del usuario
     PosicionUsuario* posUsuario; 
+    std::string token = "null";
     
     const std::string nombreClase = "Usuario";
     
@@ -35,10 +36,15 @@ public:
     bool usuarioToJson(std::string* usuarioJson);
     bool jsonToUsuario(std::string*);
     double getPosUsuario();
-    // Atributo publico ya que le objeto Posicion Usuario tiene el objeto 
-    // PosicionUsario tiene el meteodo para convertir a Json
-};
+    void setTokenusuario(std::string* tok);
+    std::string getTokenUsuario();
 
+   /*Convierte el idUsuario, longitud y latitud a Json devuelve por el parametro el archivo Json
+    retorna bool para verificar que se realizó la conversión sin promeblas 
+    Retorna el id, latitud y longitud en formato Json
+    */
+    bool getPosUsuarioJson(std::string* posJ);
+};
 
 #endif	/* Usuario_HPP */
 

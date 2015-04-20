@@ -35,7 +35,7 @@ void PosicionUsuario::getPosicionUsuarioJson(std::string* posJson)
 {
 	Json::Value root;   // starts as "null"; will contain the root value after parsing
     Json::FastWriter writer; 
-    root["IdObjecto"] = nombreClase;
+    // root["IdObjecto"] = nombreClase;
     root["idUsuario"] = usuario_id;
     root["longitud"] = longitud;
     root["latitud"] = latitud;

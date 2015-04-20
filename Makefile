@@ -4,7 +4,7 @@ SRC:=./src
 INC:=./include
 BIN:=./bin
 SHELL := /bin/sh
-LIBS:= -L$(LIB) -lzmq -lUsuario -lJson -lPosicion -lPosicionUsuario
+LIBS:= -L$(LIB) -lzmq -lUsuario -lJson -lPosicion -lPosicionUsuario -lpthread
 INCLUDE:= -I$(INC)
 EXPORT_PATH:=
 CC:= g++ -std=c++11 
