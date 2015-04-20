@@ -8,12 +8,18 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <cassert>
+#include <Recursos.hpp>
 
 // 3 6.2652965,-75.5714428
 // 1 6.2706908,-75.5699971
 // 2 6.2695098,-75.5666914
 // 4 6.2648545,-75.5676569,21
 
+struct recurso_t
+{
+    Recursos* manejador_juego;
+    zmq::context_t* contex;
+}recursos_juego;
 
 // Permite la ejecución de hilos
 void *worker_routine (void *arg)
@@ -25,7 +31,9 @@ void *worker_routine (void *arg)
     std::string tipoObjeto; // Almacena el tipo de obejto
     std::string data; // 
 
-    zmq::context_t *context = (zmq::context_t *) arg;
+    struct recurso_t* contenedor_recursos = (struct recurso_t*) arg;
+
+    zmq::context_t *context = contenedor_recursos->contex;
 
     zmq::socket_t socket (*context, ZMQ_REP);
     socket.connect ("inproc://workers");
@@ -52,9 +60,9 @@ void *worker_routine (void *arg)
         tipoObjeto = mensajeCliente.get("idObjeto", "Not Found" ).asString(); // se obtiene el valor en la clave 'idObjeto'
         data = mensajeCliente.get("data", "Not Found" ).asString(); // se obtiene el valor en la clave 'data'
         if( tipoObjeto == "usuario"){
-             Usuario user(&data); //Se crear el conjeto a partir del Json en formato String
-             std::cout << "Usuario  "<< user.getNickName() << " conectado desde" << std::endl 
-                       << "Latitud: "<< user.getLatitud() << " Longitud: "<< user.getLongitud()<< std::endl;
+             Usuario* user = new Usuario(&data); //Se crear el conjeto a partir del Json en formato String
+             std::cout << "Usuario  "<< user->getNickName() << " conectado desde" << std::endl 
+                       << "Latitud: "<< user->getLatitud() << " Longitud: "<< user->getLongitud()<< std::endl;
         }else if (tipoObjeto == "ataque"){
 
         }else if (tipoObjeto == "posUsuario"){
@@ -85,14 +93,19 @@ int main (int argc, char *argv[]) {
   // zmq::socket_t socket (context, ZMQ_REP);
   // socket.bind ("tcp://*:5555");  
 
+  int totalUsuarios = 5;
+
   zmq::socket_t clients (context, ZMQ_ROUTER);
   clients.bind ("tcp://*:5555");
   zmq::socket_t workers (context, ZMQ_DEALER);
   workers.bind ("inproc://workers");
 
+  recursos_juego.manejador_juego = new Recursos(5);
+  recursos_juego.contex = &context;
+
   for (int thread_nbr = 0; thread_nbr != 5; thread_nbr++) {
       pthread_t worker;
-      pthread_create (&worker, NULL, worker_routine, (void *) &context);
+      pthread_create (&worker, NULL, worker_routine, (void *) &recursos_juego);
   }
   
   zmq::proxy (clients, workers, NULL);

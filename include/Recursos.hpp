@@ -24,15 +24,20 @@ public:
 	// Metodo para conectar los usuarios al servidor, se debe haber relizado login antes de este metodo
 	bool conectar(Usuario* user);
 
+	bool desconectar(int idUsuario);
+
 	// El usuario enviá su posición cada x seg, se hará control de hearbet con está función
 	bool actualizarPosicionUsuario(PosicionUsuario* posUser);
+
+	int getTotalConectados();
+
 private:
 	// conexiones vigentes
 	int totalConectados = 0;
 	// Maximas conexciones permitidas
 	int maximoConectados;
 	// Lista de Usuarios Conectados
-	std::vector<Usuario> usuarios;
+	std::vector<Usuario*> usuarios;
 	std::vector<latido> latidos;
 
 	double segundosLatido = INTERVALO_ENTRE_LATIDOS;

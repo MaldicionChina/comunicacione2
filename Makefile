@@ -27,7 +27,7 @@ serverZMQ: $(SRC)/serverZeroMQ.cpp makeLibs
 clientZMQ: $(SRC)/clientZeroMQ.cpp makeLibs
 	$(CC) $(INCLUDE) $< -o $(BIN)/$@ $(LIBS)
 
-makeLibs: libPosicion.o libPosicionUsuario.o  libUsuario.o libJson.o libPosicion.so libPosicionUsuario.so libUsuario.so libJson.so libRecursos.o libRecursos.so
+makeLibs: libRecursos.o libPosicion.o libPosicionUsuario.o  libUsuario.o libJson.o libPosicion.so libPosicionUsuario.so libUsuario.so libJson.so libRecursos.so
 
 #Como se usa una libería compartida y no se encuentra en los paths
 #estandar en necesario esportar la variable de entorno LD_LIBRARY_PATH
