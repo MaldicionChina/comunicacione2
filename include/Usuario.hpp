@@ -5,6 +5,7 @@
 #include <iostream>
 #include <json/json.h>
 #include "PosicionUsuario.hpp"
+#include <time.h> 
 
 class Usuario{
 private:
@@ -19,7 +20,7 @@ private:
     // double latitud; // Dato correspondiente e la latitud de la pocisión del usuario
     PosicionUsuario* posUsuario; 
     std::string token = "null";
-    
+        
     const std::string nombreClase = "Usuario";
     
 public:

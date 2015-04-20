@@ -4,7 +4,7 @@ SRC:=./src
 INC:=./include
 BIN:=./bin
 SHELL := /bin/sh
-LIBS:= -L$(LIB) -lzmq -lUsuario -lJson -lPosicion -lPosicionUsuario -lpthread
+LIBS:= -L$(LIB) -lzmq -lUsuario -lJson -lPosicion -lPosicionUsuario -lpthread -lRecursos
 INCLUDE:= -I$(INC)
 EXPORT_PATH:=
 CC:= g++ -std=c++11 
@@ -27,13 +27,13 @@ serverZMQ: $(SRC)/serverZeroMQ.cpp makeLibs
 clientZMQ: $(SRC)/clientZeroMQ.cpp makeLibs
 	$(CC) $(INCLUDE) $< -o $(BIN)/$@ $(LIBS)
 
-makeLibs: libPosicion.o libPosicionUsuario.o  libUsuario.o libJson.o libPosicion.so libPosicionUsuario.so libUsuario.so libJson.so
+makeLibs: libPosicion.o libPosicionUsuario.o  libUsuario.o libJson.o libPosicion.so libPosicionUsuario.so libUsuario.so libJson.so libRecursos.o libRecursos.so
 
 #Como se usa una libería compartida y no se encuentra en los paths
 #estandar en necesario esportar la variable de entorno LD_LIBRARY_PATH
 #con el path donde están las librerías ya compiladas
 exportar_lib_path: ./export_lib_path.sh 
-	@./export_lib_path.sh 
+	@./export_lib_path.sh  
 ##############################Shared Library Usuario######################################
 # Se crea el  codigio objeto para la librería
 libUsuario.o: $(SRC)/Usuario.cpp $(INC)/Usuario.hpp
@@ -51,6 +51,14 @@ libJson.o: $(SRC)/jsoncpp.cpp $(INC)/json/json.h
 libJson.so: $(LIB)/libJson.o libJson.o
 	$(CC) -shared $<  -o $(LIB)/$@
 ##############################Shared Library Json#########################################
+
+##############################Shared Library Recursos#########################################
+libRecursos.o: $(SRC)/Recursos.cpp $(INC)/Recursos.hpp
+	$(CC) $(INCLUDE) -c -fPIC $< -o $(LIB)/$@ 
+
+libRecursos.so: $(LIB)/libRecursos.o libRecursos.o
+	$(CC) -shared $<  -o $(LIB)/$@
+##############################Shared Library Recursos#########################################
 
 ##############################Shared Library Posicion######################################
 libPosicion.o: $(SRC)/Posicion.cpp $(INC)/Posicion.hpp

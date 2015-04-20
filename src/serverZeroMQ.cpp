@@ -80,8 +80,6 @@ void *worker_routine (void *arg)
 
 int main (int argc, char *argv[]) {
 
-
-
   //Prepare our context and socket
   zmq::context_t context (1);
   // zmq::socket_t socket (context, ZMQ_REP);
