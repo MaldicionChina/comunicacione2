@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <cassert>
 #include <Recursos.hpp>
-
+#include <time.h> 
 // 3 6.2652965,-75.5714428
 // 1 6.2706908,-75.5699971
 // 2 6.2695098,-75.5666914
@@ -30,7 +30,13 @@ void *worker_routine (void *arg)
     Json::Reader readerJson; // Para relizar conversiones de string a objeto Json
     std::string tipoObjeto; // Almacena el tipo de obejto
     std::string data; // 
+    bool mensajeRecibido = false;
 
+    time_t ahora,despues; // Control de actualización de juagdores conectados
+    double tiempoSeg = 1000; // Tiempo entre actualizaciones en segundos
+    double totalSeg;
+
+    time(&ahora); // Toma la primera marca de tiempo
     struct recurso_t* contenedor_recursos = (struct recurso_t*) arg;
 
     zmq::context_t *context = contenedor_recursos->contex;
@@ -43,6 +49,7 @@ void *worker_routine (void *arg)
         zmq::message_t request;
         //  Espera por algún mensaje de los usuarios
         socket.recv (&request);
+
         // std::cout << "Received request: [" << (char*) request.data() << "]" << std::endl;
 
         // Conversión de message_t a string
@@ -61,8 +68,21 @@ void *worker_routine (void *arg)
         data = mensajeCliente.get("data", "Not Found" ).asString(); // se obtiene el valor en la clave 'data'
         if( tipoObjeto == "usuario"){
              Usuario* user = new Usuario(&data); //Se crear el conjeto a partir del Json en formato String
-             std::cout << "Usuario  "<< user->getNickName() << " conectado desde" << std::endl 
-                       << "Latitud: "<< user->getLatitud() << " Longitud: "<< user->getLongitud()<< std::endl;
+             if(!contenedor_recursos->manejador_juego->conectar(user))
+             {
+                  replyServer = "Sorry Full server";
+             }
+
+             // contenedor_recursos->manejador_juego->getUsuarioById(2);
+             Usuario* prueba;
+             contenedor_recursos->manejador_juego->getUsuarioById(user->getIdUsuario(),prueba);
+
+             // std::cout << "Usuario  ";
+             // std::cout << prueba->getNickName()
+             //           << " conectado desde" << std::endl ;
+                       // << "Latitud: "<< user->getLatitud() << " Longitud: "<< user->getLongitud()<< std::endl;
+
+
         }else if (tipoObjeto == "ataque"){
 
         }else if (tipoObjeto == "posUsuario"){
@@ -81,6 +101,16 @@ void *worker_routine (void *arg)
 //     // Conversión de stringstreamer a zmq::message_t
         zmq::message_t reply ((void*)lineStream.str().c_str(), lineStream.str().size()+1, NULL);
         socket.send (reply);
+        
+
+        totalSeg = difftime(ahora,time(&despues));
+
+          // Si el tiempo que ha pasado es mayor al tiempo de actualización
+        if(totalSeg > tiempoSeg){
+          // contenedor_recursos->manejador_juego->getUsuarioById(5)->getNickName();
+        }
+        std::cout << "Total Conectados: " << contenedor_recursos->manejador_juego->getTotalConectados()<< std::endl;
+        // std::cout << "Total Conectados: " << contenedor_recursos->manejador_juego->maximoConectados<< std::endl;
     }
     return (NULL);
 }
@@ -106,9 +136,13 @@ int main (int argc, char *argv[]) {
   for (int thread_nbr = 0; thread_nbr != 5; thread_nbr++) {
       pthread_t worker;
       pthread_create (&worker, NULL, worker_routine, (void *) &recursos_juego);
-  }
-  
+  }  
   zmq::proxy (clients, workers, NULL);
+
+  // for (int thread_nbr = 0; thread_nbr != 5; thread_nbr++){
+  //     pthread_t timer;
+  //     pthread_create (&timer, NULL, worker_routine, (void *) &recursos_juego);
+  // }
   return 0;
 
   // int count = 0;

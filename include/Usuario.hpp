@@ -20,7 +20,8 @@ private:
     // double latitud; // Dato correspondiente e la latitud de la pocisión del usuario
     PosicionUsuario* posUsuario; 
     std::string token = "null";
-        
+    int poderAtaque = 1;
+
     const std::string nombreClase = "Usuario";
     
 public:

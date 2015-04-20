@@ -35,14 +35,14 @@ int main (int argc, char *argv[])
 
   std::cout << "Bienvenido al Juego" << std::endl;
 
-  if(argc != 2)
+  if(argc != 3)
   {
-      std::cout << argv[0] << " NombreJugador" << std::endl;
+      std::cout << argv[0] << " Id NombreJugador" << std::endl;
       return -1;
   }
 
-	std::string nombreJugador = argv[1];
-	int idJugador = 5; 
+	std::string nombreJugador = argv[2];
+	int idJugador = std::stoi(argv[1]); 
 	int nivelJudador = 3; 
 	int vidaJudador = 100; 
 	int vidaMaxUsuario = 100; 

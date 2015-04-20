@@ -9,7 +9,7 @@ class Ataque {
     
     public:
 
-   Ataque(int* atacado, int*);//Constructor de la clase
+   Ataque(int* atacado, int* atacante);//Constructor de la clase
 
 };
 #endif

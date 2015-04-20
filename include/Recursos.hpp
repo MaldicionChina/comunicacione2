@@ -31,6 +31,11 @@ public:
 
 	int getTotalConectados();
 
+	bool atacarUsuario(int idAtacante, int idAtacado);
+
+	// Aún sin implementar totalmente
+	bool getUsuarioById(int idUser, Usuario* user);
+
 private:
 	// conexiones vigentes
 	int totalConectados = 0;

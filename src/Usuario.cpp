@@ -62,6 +62,7 @@ Usuario::Usuario(std::string* rpl)
     nickName = usuario.get("nickName", "Not Found" ).asString(); 
     nivelUsuario = std::stoi(usuario.get("nivelUsuario", "Not Found" ).asString()); 
     vidaUsuario = std::stoi(usuario.get("vidaUsuario", "Not Found" ).asString()); 
+    poderAtaque = std::stoi(usuario.get("poderAtaque", "Not Found" ).asString()); 
     vidaMaxUsuario = std::stoi(usuario.get("vidaMaxUsuario", "Not Found" ).asString()); 
     // longitud = usuario.get("idUsuario", "Not Found" ).asString(); 
     // latitud = usuario.get("idUsuario", "Not Found" ).asString(); 
@@ -83,6 +84,7 @@ bool Usuario::usuarioToJson(std::string* usuarioJson){
     root["nivelUsuario"] = nivelUsuario;
     root["vidaUsuario"] = vidaUsuario;
     root["vidaMaxUsuario"] = vidaMaxUsuario;
+    root["poderAtaque"] = poderAtaque;
     // root["longitud"] = longitud;
     // root["latitud"] = latitud;
     posUsuario->getPosicionUsuarioJson(&posJson);

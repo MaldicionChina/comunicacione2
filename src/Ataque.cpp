@@ -1,6 +1,6 @@
 #include "Ataque.hpp"
 
-Ataque::Ataque(int* atado, int* atante ){//atado es atacado atante es atacante
+Ataque::Ataque(int* atado, int* atacante ){//atado es atacado atante es atacante
         atacante = *atante;
         atacado = *atado;
 } // Constructor
