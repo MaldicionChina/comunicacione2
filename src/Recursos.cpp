@@ -18,13 +18,33 @@ bool Recursos::atacarUsuario(int idAtacante, int idAtacado){
 
 }
 
+int Recursos::getUsuariosConectadosJson(std::string* conectadosJson){
+
+	std::string posJson;
+	Json::Value conectados;  // Objeto Json 
+	Json::FastWriter writer; // Conversor de objeto Json a formato string 
+
+	if(totalConectados>0){
+    // root["idObjecto"] = nombreClase;
+
+		for(int j = 0; j < usuarios.size(); j++){
+			    usuarios.at(j)->getPosUsuarioJson(&posJson);
+			    conectados[j] = posJson;
+			}
+			*conectadosJson = writer.write(conectados);
+			// std::cout << "Posiciones "<< std::endl << writer.write(conectados) << std::endl;
+		}
+	return totalConectados;
+}
+
+
 bool Recursos::getUsuarioById(int idUser, Usuario* user){
 
-	std::cout << "Tamaño usuarios "<<usuarios.size() << std::endl;
-	std::cout << "algo... "<<usuarios.at(0)->getIdUsuario() << std::endl;
-	std::string usuarioJson;
+	// std::cout << "Tamaño usuarios "<< usuarios.size() << std::endl;
+	// std::cout << "algo... "<<usuarios.at(idUser)->getIdUsuario() << std::endl;
+	std::string usuarioJson; 
 	
-	for(unsigned i = 0; i <= usuarios.size(); i++){
+	for(int i = 0; i < usuarios.size(); i++){
 		if(usuarios.at(i)->getIdUsuario()==idUser){
 			// usuarios.at(i)->getNickName();
 			usuarios.at(i)->usuarioToJson(&usuarioJson);

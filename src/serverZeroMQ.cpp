@@ -25,12 +25,13 @@ struct recurso_t
 void *worker_routine (void *arg)
 {
 
-    std::string replyServer ="Ok";
+    std::string replyServer;
     Json::Value mensajeCliente;
     Json::Reader readerJson; // Para relizar conversiones de string a objeto Json
     std::string tipoObjeto; // Almacena el tipo de obejto
     std::string data; // 
     bool mensajeRecibido = false;
+    std::string usuariosConectadosJson; // String para contener la posiciones de los usuarios
 
     time_t ahora,despues; // Control de actualización de juagdores conectados
     double tiempoSeg = 1000; // Tiempo entre actualizaciones en segundos
@@ -49,8 +50,6 @@ void *worker_routine (void *arg)
         zmq::message_t request;
         //  Espera por algún mensaje de los usuarios
         socket.recv (&request);
-
-        // std::cout << "Received request: [" << (char*) request.data() << "]" << std::endl;
 
         // Conversión de message_t a string
         std::string preJson = std::string(static_cast<char*>(request.data()), request.size()); 
@@ -71,12 +70,15 @@ void *worker_routine (void *arg)
              if(!contenedor_recursos->manejador_juego->conectar(user))
              {
                   replyServer = "Sorry Full server";
-             }
-
+             }else{
              // contenedor_recursos->manejador_juego->getUsuarioById(2);
-             Usuario* prueba;
-             contenedor_recursos->manejador_juego->getUsuarioById(user->getIdUsuario(),prueba);
-
+                   Usuario* prueba;
+                   
+                   contenedor_recursos->manejador_juego->getUsuarioById(user->getIdUsuario(),prueba);
+                   contenedor_recursos->manejador_juego->getUsuariosConectadosJson(&usuariosConectadosJson);
+                   std::cout << "Posiciones :"<< usuariosConectadosJson << std::endl;
+                   replyServer = usuariosConectadosJson;
+             }
              // std::cout << "Usuario  ";
              // std::cout << prueba->getNickName()
              //           << " conectado desde" << std::endl ;
@@ -84,7 +86,7 @@ void *worker_routine (void *arg)
 
 
         }else if (tipoObjeto == "ataque"){
-
+            // contenedor_recursos->manejador_juego->atacarUsuario();
         }else if (tipoObjeto == "posUsuario"){
 
         }else if (tipoObjeto == "login"){

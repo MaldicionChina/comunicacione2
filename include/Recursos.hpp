@@ -36,6 +36,10 @@ public:
 	// Aún sin implementar totalmente
 	bool getUsuarioById(int idUser, Usuario* user);
 
+	// Se obtiene la posicion y el identificador del usuario en un documento json
+	// Retorna el total de usuarios conectados
+	int getUsuariosConectadosJson(std::string* conectadosJson);
+
 private:
 	// conexiones vigentes
 	int totalConectados = 0;

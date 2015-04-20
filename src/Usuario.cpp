@@ -20,7 +20,6 @@ double Usuario::getLongitud(){
 bool Usuario::getPosUsuarioJson(std::string* posJ){
 
     posUsuario->getPosicionUsuarioJson(posJ);
-
     return true;
 }
 std::string Usuario::getTokenUsuario(){

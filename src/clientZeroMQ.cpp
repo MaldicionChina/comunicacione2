@@ -22,7 +22,7 @@ std::string enviarObjetoServer(zmq::socket_t* soc, std::string tipoObjeto, std::
 
   soc->recv (reply);
   std::string rpl = std::string(static_cast<char*>(reply->data()), reply->size()); // COnversión de message_t a string
-  std::cout << rpl << std::endl;
+  std::cout << rpl << "tamaño: " << reply->size() << std::endl;
   return rpl;
 }
 

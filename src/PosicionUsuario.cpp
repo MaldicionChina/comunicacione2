@@ -39,7 +39,6 @@ void PosicionUsuario::getPosicionUsuarioJson(std::string* posJson)
     root["idUsuario"] = usuario_id;
     root["longitud"] = longitud;
     root["latitud"] = latitud;
-
     *posJson = writer.write(root);
 }
 bool PosicionUsuario::jsonToPosicionUsuario(Json::Value*){
