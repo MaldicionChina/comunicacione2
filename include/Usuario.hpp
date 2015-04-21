@@ -29,6 +29,9 @@ public:
     Usuario(int* idUsuarioCons,std::string* nicknameCons,std::string* tok,
       int* lvlUsuario, int* vida, int*vidaMax,double* lon, double* lati); // Constructor  
 
+ Usuario(int* idUsuarioCons,std::string* nicknameCons,
+      int* lvlUsuario, int* vida, int*vidaMax,double* lon, double* lati); //Constructor sin token
+
     Usuario(std::string*); // Constructor a partir de un documento Json en formato string
  
     int getIdUsuario(); // Obtener el id del Usuario
