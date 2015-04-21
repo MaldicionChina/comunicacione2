@@ -8,6 +8,7 @@
 #include <time.h> 
 
 class Usuario{
+
 private:
     int idUsuario; // ID único que identifica inequivocamente al Usuario en todo el juego
     std::string nickName; // Nombre en el juego para el Usuario
@@ -18,12 +19,15 @@ private:
     int posY; // Indice Y para lara posición en la cuadricula
     std::string estadoUsuario; // el usuario está Vivo o muerto ?
     PosicionUsuario* posUsuario; 
-    std::string token = "null";
+    std::string token = "null";//token de autentificacion
     int poderAtaque = 1;
 
 public:
-    Usuario(int* idUsuarioCons,std::string* nicknameCons,
+    Usuario(int* idUsuarioCons,std::string* nicknameCons,std::string* tok,
       int* lvlUsuario, int* vida, int*vidaMax,double* lon, double* lati); // Constructor  
+
+ Usuario(int* idUsuarioCons,std::string* nicknameCons,
+      int* lvlUsuario, int* vida, int*vidaMax,double* lon, double* lati); //Constructor sin token
 
     Usuario(std::string*); // Constructor a partir de un documento Json en formato string
  

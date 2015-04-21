@@ -38,6 +38,17 @@ void Usuario::setTokenusuario(std::string* tok){
     token = *tok;
 }
 
+Usuario::Usuario(int* idUsuarioCons,std::string* nicknameCons,std::string* tok,
+      int* lvlUsuario, int* vida, int*vidaMax,double* lon, double* lati){
+        token= *tok;
+        idUsuario = *idUsuarioCons; 
+        nickName = *nicknameCons; 
+        nivelUsuario = *lvlUsuario; 
+        vidaUsuario = *vida; 
+        vidaMaxUsuario = *vidaMax; 
+        posUsuario = new PosicionUsuario(lon,lati,idUsuarioCons);
+        
+} 
 Usuario::Usuario(int* idUsuarioCons,std::string* nicknameCons,
       int* lvlUsuario, int* vida, int*vidaMax,double* lon, double* lati){
         
