@@ -18,13 +18,13 @@ class PosicionUsuario : public Posicion {
     PosicionUsuario(std::string*); // Cosntructor a partir de un documento Json en formato string
     // PosicionUsuario();
     void getPosicionUsuarioJson(std::string*);
-
     bool setPosicionUsuarioJson(Json::Value*);
-
     bool jsonToPosicionUsuario(Json::Value*);
+    bool actualizarPosicion(PosicionUsuario* posActualizar);
 
     double getLatitud();
     double getLongitud();
+    int getIdUsuario();
     	
     };
 

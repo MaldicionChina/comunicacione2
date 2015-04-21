@@ -17,7 +17,7 @@ CC:= g++ -std=c++11
 #%.o:%.c
 #	$(CC) -c $< -o $@
 
-all: makeLibs serverZMQ clientZMQ ./exportar_lib_path
+all: makeLibs serverZMQ clientZMQ cambioZMQ ./exportar_lib_path
 	@./export_lib_path.sh 
 
 serverZMQ: $(SRC)/serverZeroMQ.cpp makeLibs
@@ -25,6 +25,9 @@ serverZMQ: $(SRC)/serverZeroMQ.cpp makeLibs
 
 # Se compila el progrema cliente	
 clientZMQ: $(SRC)/clientZeroMQ.cpp makeLibs
+	$(CC) $(INCLUDE) $< -o $(BIN)/$@ $(LIBS)
+
+cambioZMQ: $(SRC)/ClienteCambioPos.cpp makeLibs
 	$(CC) $(INCLUDE) $< -o $(BIN)/$@ $(LIBS)
 
 makeLibs: libRecursos.o libPosicion.o libPosicionUsuario.o  libUsuario.o libJson.o libPosicion.so libPosicionUsuario.so libUsuario.so libJson.so libRecursos.so

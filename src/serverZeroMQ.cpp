@@ -21,10 +21,15 @@ struct recurso_t
     zmq::context_t* contex;
 }recursos_juego;
 
+// Metodo para encapsular el documento json en "idObjeto":"XXX","data":"Contenido en Json del objeto"
+std::string encapsularJson(std::string jsonEncapsular){
+    Json::Value encapsulado;
+    Json::FastWriter writer;
+}
+
 // Permite la ejecución de hilos
 void *worker_routine (void *arg)
 {
-
     std::string replyServer;
     Json::Value mensajeCliente;
     Json::Reader readerJson; // Para relizar conversiones de string a objeto Json
@@ -72,23 +77,20 @@ void *worker_routine (void *arg)
                   replyServer = "Sorry Full server";
              }else{
              // contenedor_recursos->manejador_juego->getUsuarioById(2);
-                   Usuario* prueba;
-                   
-                   contenedor_recursos->manejador_juego->getUsuarioById(user->getIdUsuario(),prueba);
-                   contenedor_recursos->manejador_juego->getUsuariosConectadosJson(&usuariosConectadosJson);
-                   std::cout << "Posiciones :"<< usuariosConectadosJson << std::endl;
-                   replyServer = usuariosConectadosJson;
+                  replyServer = "Conexión Exitosa";
              }
-             // std::cout << "Usuario  ";
-             // std::cout << prueba->getNickName()
-             //           << " conectado desde" << std::endl ;
-                       // << "Latitud: "<< user->getLatitud() << " Longitud: "<< user->getLongitud()<< std::endl;
-
-
         }else if (tipoObjeto == "ataque"){
             // contenedor_recursos->manejador_juego->atacarUsuario();
         }else if (tipoObjeto == "posUsuario"){
-
+            // Cuando el usuario envia su posición se le retorna las posiciones de los demás jugadores en formato Json
+            // se crea objeto PosicionUsuario a partir del Json en formato string 
+            PosicionUsuario posUser(&data); 
+            // Se actuliza la posición del jugador que envia su posición
+            contenedor_recursos->manejador_juego->actualizarPosicionUsuario(&posUser);
+            // Se obtiene la lista de jugadores conectados en formato Json
+            contenedor_recursos->manejador_juego->getUsuariosConectadosJson(&usuariosConectadosJson,posUser.getIdUsuario());
+            // La respueta del servidor al usuario que hizo la petición
+            replyServer = usuariosConectadosJson; 
         }else if (tipoObjeto == "login"){
 
         }else{
@@ -102,8 +104,7 @@ void *worker_routine (void *arg)
 
 //     // Conversión de stringstreamer a zmq::message_t
         zmq::message_t reply ((void*)lineStream.str().c_str(), lineStream.str().size()+1, NULL);
-        socket.send (reply);
-        
+        socket.send (reply);       
 
         totalSeg = difftime(ahora,time(&despues));
 
@@ -138,14 +139,8 @@ int main (int argc, char *argv[]) {
   for (int thread_nbr = 0; thread_nbr != 5; thread_nbr++) {
       pthread_t worker;
       pthread_create (&worker, NULL, worker_routine, (void *) &recursos_juego);
-  }  
+    }  
   zmq::proxy (clients, workers, NULL);
-
-  // for (int thread_nbr = 0; thread_nbr != 5; thread_nbr++){
-  //     pthread_t timer;
-  //     pthread_create (&timer, NULL, worker_routine, (void *) &recursos_juego);
-  // }
-  return 0;
 
   // int count = 0;
   // std::cout << "Listen in port 5555" << std::endl;

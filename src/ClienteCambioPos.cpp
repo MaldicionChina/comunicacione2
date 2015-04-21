@@ -62,8 +62,10 @@ int main (int argc, char *argv[])
 
   std::cout << "ID jugador: "<< jugaa->getIdUsuario() << std::endl;
 
-      jugaa->usuarioToJson(&json_output); // Se obtiene el string json del usuario
-      enviarObjetoServer(&socket,"usuario",&json_output,&reply) ;
+      std::this_thread::sleep_for (std::chrono::seconds(3)); // envia la posicion de nuevo
+      std::cout << "Cambio de pos" << std::endl;
+      enviarObjetoServer(&socket,"posUsuario",&cambioPos,&reply) ;
+      // std::cout << "Enviado..." << enviarObjetoServer(&socket,"posUsuario",&cambioPos,&reply) << std::endl;
 
   delete jugaa;
   return 0;

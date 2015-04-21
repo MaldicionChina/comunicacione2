@@ -5,7 +5,7 @@
 #include <list>
 #include <Usuario.hpp>
 #include <vector>
-#include <PosicionUsuario.hpp>
+#include "PosicionUsuario.hpp"
 #include <time.h> 
 
 #define LADITOS_SIN_RESPUESTA  3       // total de latidos antes de la desconexión del usuario
@@ -38,7 +38,7 @@ public:
 
 	// Se obtiene la posicion y el identificador del usuario en un documento json
 	// Retorna el total de usuarios conectados
-	int getUsuariosConectadosJson(std::string* conectadosJson);
+	int getUsuariosConectadosJson(std::string* conectadosJson,int idUsuarioEnviar);
 
 private:
 	// conexiones vigentes

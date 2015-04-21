@@ -40,6 +40,7 @@ public:
     double getPosUsuario();
     void setTokenusuario(std::string* tok);
     std::string getTokenUsuario();
+    bool actualizarPos(PosicionUsuario* posActualizar);
 
    /*Convierte el idUsuario, longitud y latitud a Json devuelve por el parametro el archivo Json
     retorna bool para verificar que se realizó la conversión sin promeblas 

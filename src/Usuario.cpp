@@ -9,16 +9,24 @@ std::string Usuario::getNickName(){
         return nickName;
 }
 
+//Actualiza posición del objeto posUsuario
+bool Usuario::actualizarPos(PosicionUsuario* posActualizar){
+        posUsuario->actualizarPosicion(posActualizar);
+        return true;
+}
+
+// Obtiene latitud del objeto posUsuario
 double Usuario::getLatitud(){
         return posUsuario->getLatitud();
 }
 
+// Obtiene longitud del objeto posUsuario
 double Usuario::getLongitud(){
         return posUsuario->getLongitud();
 }
 
+// Retorna por referencia la posición del usuario en Json
 bool Usuario::getPosUsuarioJson(std::string* posJ){
-
     posUsuario->getPosicionUsuarioJson(posJ);
     return true;
 }
@@ -30,7 +38,6 @@ void Usuario::setTokenusuario(std::string* tok){
     token = *tok;
 }
 
-
 Usuario::Usuario(int* idUsuarioCons,std::string* nicknameCons,
       int* lvlUsuario, int* vida, int*vidaMax,double* lon, double* lati){
         
@@ -39,11 +46,9 @@ Usuario::Usuario(int* idUsuarioCons,std::string* nicknameCons,
         nivelUsuario = *lvlUsuario; 
         vidaUsuario = *vida; 
         vidaMaxUsuario = *vidaMax; 
-        // longitud = *lon; 
-        // latitud = *lati; 
         posUsuario = new PosicionUsuario(lon,lati,idUsuarioCons);
         
-    } // Constructor
+} 
 
 Usuario::Usuario(std::string* rpl)
 {
@@ -57,19 +62,17 @@ Usuario::Usuario(std::string* rpl)
        << readerJson.getFormattedErrorMessages();
     }
 
+    // Se obtiene el valor de cada campo de acuerdo a la clave, en caso de no encontrarse retorna "Not found"
     idUsuario = std::stoi(usuario.get("idUsuario", "Not Found" ).asString()); 
     nickName = usuario.get("nickName", "Not Found" ).asString(); 
     nivelUsuario = std::stoi(usuario.get("nivelUsuario", "Not Found" ).asString()); 
     vidaUsuario = std::stoi(usuario.get("vidaUsuario", "Not Found" ).asString()); 
     poderAtaque = std::stoi(usuario.get("poderAtaque", "Not Found" ).asString()); 
     vidaMaxUsuario = std::stoi(usuario.get("vidaMaxUsuario", "Not Found" ).asString()); 
-    // longitud = usuario.get("idUsuario", "Not Found" ).asString(); 
-    // latitud = usuario.get("idUsuario", "Not Found" ).asString(); 
     posJson = usuario.get("posUsuario", "Not Found" ).asString(); 
     posUsuario = new PosicionUsuario(&posJson);
     token = usuario.get("token", "null" ).asString();
-} // constructor
-
+}
 
 // realiza la conversión del Usuario a objeto Json
 bool Usuario::usuarioToJson(std::string* usuarioJson){
@@ -77,19 +80,18 @@ bool Usuario::usuarioToJson(std::string* usuarioJson){
     Json::FastWriter writer; // Conversor de objeto Json a formato string 
     std::string posJson;
 
-    // root["idObjecto"] = nombreClase;
-    root["idUsuario"] = idUsuario;
+    // En el objeto json se crean campos "clave":"valor"
+    root["idUsuario"] = idUsuario; 
     root["nickName"] = nickName;
     root["nivelUsuario"] = nivelUsuario;
     root["vidaUsuario"] = vidaUsuario;
     root["vidaMaxUsuario"] = vidaMaxUsuario;
     root["poderAtaque"] = poderAtaque;
-    // root["longitud"] = longitud;
-    // root["latitud"] = latitud;
     posUsuario->getPosicionUsuarioJson(&posJson);
     root["posUsuario"] = posJson;
     root["token"] = token;
 
+    // Se convierte el Objeto Json a formato String
     *usuarioJson = writer.write(root);
 
     return true;

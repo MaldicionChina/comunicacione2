@@ -1,10 +1,3 @@
-/* 
- * File:   PosicionJugador.cpp
- * Author: emmanuel
- * 
- * Created on 18 de abril de 2015, 09:42 PM
- */
-
 #include "PosicionUsuario.hpp"
 
 PosicionUsuario::PosicionUsuario(double* lat,double* lon ,int* id ) {//Contructor lat es latitud lon longitud id es idusuario
@@ -28,21 +21,32 @@ PosicionUsuario::PosicionUsuario(std::string* rpl){
     latitud =  std::stod(posicion.get("latitud", "Not Found" ).asString()); 
     longitud = std::stod(posicion.get("longitud", "Not Found" ).asString());
     usuario_id = std::stoi(posicion.get("idUsuario", "Not Found" ).asString());
-
 }
 
+// Retorna la posición en formato Json
 void PosicionUsuario::getPosicionUsuarioJson(std::string* posJson)
 {
-	Json::Value root;   // starts as "null"; will contain the root value after parsing
-    Json::FastWriter writer; 
-    // root["IdObjecto"] = nombreClase;
+	Json::Value root; // Objeto que almacena la estructura Json
+    Json::FastWriter writer; //Conversor de Objeto Json a String Json
+
+    // En el objeto json se crean campos "clave":"valor"
     root["idUsuario"] = usuario_id;
     root["longitud"] = longitud;
     root["latitud"] = latitud;
+
+    // Se convierte el Objeto Json a formato String
     *posJson = writer.write(root);
 }
-bool PosicionUsuario::jsonToPosicionUsuario(Json::Value*){
 
+// Actualiza la posición 
+bool PosicionUsuario::actualizarPosicion(PosicionUsuario* posActualizar){
+    longitud = posActualizar->getLongitud();
+    latitud = posActualizar->getLatitud();
+    return true;
+}
+
+int PosicionUsuario::getIdUsuario(){
+    return usuario_id;
 }
 
 double PosicionUsuario::getLatitud(){
