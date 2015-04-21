@@ -16,14 +16,11 @@ private:
     int vidaMaxUsuario; // Vida total que puede tener el usuario; varia de acuerdo al nivel
     int posX; // Indice X para la posición en la cuadricula
     int posY; // Indice Y para lara posición en la cuadricula
-    // double longitud; // Dato correspondiente e la longitud de la pocisión del usuario
-    // double latitud; // Dato correspondiente e la latitud de la pocisión del usuario
+    std::string estadoUsuario; // el usuario está Vivo o muerto ?
     PosicionUsuario* posUsuario; 
     std::string token = "null";
     int poderAtaque = 1;
 
-    const std::string nombreClase = "Usuario";
-    
 public:
     Usuario(int* idUsuarioCons,std::string* nicknameCons,
       int* lvlUsuario, int* vida, int*vidaMax,double* lon, double* lati); // Constructor  
@@ -41,6 +38,8 @@ public:
     void setTokenusuario(std::string* tok);
     std::string getTokenUsuario();
     bool actualizarPos(PosicionUsuario* posActualizar);
+    bool perderVida(int restar);
+
 
    /*Convierte el idUsuario, longitud y latitud a Json devuelve por el parametro el archivo Json
     retorna bool para verificar que se realizó la conversión sin promeblas 

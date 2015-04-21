@@ -7,9 +7,11 @@
 #include <vector>
 #include "PosicionUsuario.hpp"
 #include <time.h> 
+#include "Ataque.hpp"
 
 #define LADITOS_SIN_RESPUESTA  3       // total de latidos antes de la desconexión del usuario
 #define INTERVALO_ENTRE_LATIDOS  1000  //  msecs
+#define PODER_ATAQUE 2
 
 struct latido {
 	int idUsuario; // Identificación del usuario
@@ -31,14 +33,15 @@ public:
 
 	int getTotalConectados();
 
-	bool atacarUsuario(int idAtacante, int idAtacado);
+	bool atacarUsuario(Ataque* atac);
 
 	// Aún sin implementar totalmente
-	bool getUsuarioById(int idUser, Usuario* user);
+	std::string getUsuarioByIdJson(int idUser);
 
 	// Se obtiene la posicion y el identificador del usuario en un documento json
 	// Retorna el total de usuarios conectados
 	int getUsuariosConectadosJson(std::string* conectadosJson,int idUsuarioEnviar);
+
 
 private:
 	// conexiones vigentes

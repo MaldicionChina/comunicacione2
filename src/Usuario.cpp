@@ -46,9 +46,26 @@ Usuario::Usuario(int* idUsuarioCons,std::string* nicknameCons,
         nivelUsuario = *lvlUsuario; 
         vidaUsuario = *vida; 
         vidaMaxUsuario = *vidaMax; 
+        estadoUsuario = "vivo";
         posUsuario = new PosicionUsuario(lon,lati,idUsuarioCons);
         
 } 
+
+bool Usuario::perderVida(int restar){
+
+    if(estadoUsuario=="vivo")
+    {
+        if(vidaUsuario > restar)
+        {
+            vidaUsuario = vidaUsuario - restar;
+            return true;
+        }else{
+            vidaUsuario = 0;
+            estadoUsuario = "muerto";
+            return false;
+        }
+    }
+}
 
 Usuario::Usuario(std::string* rpl)
 {
@@ -69,6 +86,7 @@ Usuario::Usuario(std::string* rpl)
     vidaUsuario = std::stoi(usuario.get("vidaUsuario", "Not Found" ).asString()); 
     poderAtaque = std::stoi(usuario.get("poderAtaque", "Not Found" ).asString()); 
     vidaMaxUsuario = std::stoi(usuario.get("vidaMaxUsuario", "Not Found" ).asString()); 
+    estadoUsuario = usuario.get("estadoUsuario", "null" ).asString();
     posJson = usuario.get("posUsuario", "Not Found" ).asString(); 
     posUsuario = new PosicionUsuario(&posJson);
     token = usuario.get("token", "null" ).asString();
@@ -84,6 +102,7 @@ bool Usuario::usuarioToJson(std::string* usuarioJson){
     root["idUsuario"] = idUsuario; 
     root["nickName"] = nickName;
     root["nivelUsuario"] = nivelUsuario;
+    root["estadoUsuario"] = estadoUsuario;
     root["vidaUsuario"] = vidaUsuario;
     root["vidaMaxUsuario"] = vidaMaxUsuario;
     root["poderAtaque"] = poderAtaque;

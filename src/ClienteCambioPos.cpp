@@ -6,7 +6,8 @@
 #include <json/json.h>
 #include <sstream>  
 #include <thread>         // std::this_thread::sleep_for
-#include <chrono>         // std::chrono::seconds
+#include <chrono>    
+#include "Ataque.hpp"     // std::chrono::seconds
 
 std::string enviarObjetoServer(zmq::socket_t* soc, std::string tipoObjeto, std::string* jsonObjetcString, zmq::message_t* reply){
   Json::Value enviar;
@@ -54,6 +55,7 @@ int main (int argc, char *argv[])
     	,&vidaMaxUsuario,&longitud,&latitud);
   std::string cambioPos = "{\"idUsuario\":"+std::string(argv[1])+",\"latitud\":1,\"longitud\":1}";
 
+
    // Se prepara el contexto y el socket para iniciar la comunicación con el servidor
   zmq::context_t context (1);
   zmq::socket_t socket (context, ZMQ_REQ); // socket de tipo REQUEST
@@ -66,6 +68,13 @@ int main (int argc, char *argv[])
       std::cout << "Cambio de pos" << std::endl;
       enviarObjetoServer(&socket,"posUsuario",&cambioPos,&reply) ;
       // std::cout << "Enviado..." << enviarObjetoServer(&socket,"posUsuario",&cambioPos,&reply) << std::endl;
+
+      // std::this_thread::sleep_for (std::chrono::seconds(5)); // envia la posicion de nuevo
+      Ataque ataque(2,3);
+
+      std::string atacJson;
+      ataque.ataqueToJson(&atacJson);
+      enviarObjetoServer(&socket,"ataque",&atacJson,&reply) ;
 
   delete jugaa;
   return 0;

@@ -14,8 +14,14 @@ bool Recursos::conectar(Usuario* user){
 	return false;
 }
 
-bool Recursos::atacarUsuario(int idAtacante, int idAtacado){
+bool Recursos::atacarUsuario(Ataque* atac){
 
+	for(int i = 0; i < usuarios.size(); i++){
+		if(usuarios.at(i)->getIdUsuario()==atac->getIdAtacado()){
+			usuarios.at(i)->perderVida(PODER_ATAQUE);
+			return true;
+		}
+	}
 }
 
 // Retorna la posición en documento Json de todos los usuario conectados
@@ -39,20 +45,17 @@ int Recursos::getUsuariosConectadosJson(std::string* conectadosJson, int idUsuar
 }
 
 // PELIGRO: Revisar Utilidad de este metodo
-bool Recursos::getUsuarioById(int idUser, Usuario* user){
+std::string Recursos::getUsuarioByIdJson(int idUser){
 
 	std::string usuarioJson; 
 	// Se realiza la busqueda del usuario en la lista de usuario conectados
 	for(int i = 0; i < usuarios.size(); i++){
 		if(usuarios.at(i)->getIdUsuario()==idUser){
-			// usuarios.at(i)->getNickName();
 			usuarios.at(i)->usuarioToJson(&usuarioJson);
-			// std::cout << "Id...."<< usuarioJson << std::endl;
-			// Usuario* salida = new Usuario(&);
-			return true;
+			return usuarioJson;
 		}
 	}
-	return false;
+	return "null";
 }
 
 bool Recursos::desconectar(int idUsuario){

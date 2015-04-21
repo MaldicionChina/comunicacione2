@@ -10,6 +10,7 @@
 #include <cassert>
 #include <Recursos.hpp>
 #include <time.h> 
+#include "Ataque.hpp"
 // 3 6.2652965,-75.5714428
 // 1 6.2706908,-75.5699971
 // 2 6.2695098,-75.5666914
@@ -72,6 +73,7 @@ void *worker_routine (void *arg)
         data = mensajeCliente.get("data", "Not Found" ).asString(); // se obtiene el valor en la clave 'data'
         if( tipoObjeto == "usuario"){
              Usuario* user = new Usuario(&data); //Se crear el conjeto a partir del Json en formato String
+             std::cout << "Usuario " << data << std::endl;
              if(!contenedor_recursos->manejador_juego->conectar(user))
              {
                   replyServer = "Sorry Full server";
@@ -81,6 +83,10 @@ void *worker_routine (void *arg)
              }
         }else if (tipoObjeto == "ataque"){
             // contenedor_recursos->manejador_juego->atacarUsuario();
+            std::cout << "Ataque " << data << std::endl;
+            Ataque atac(&data);
+            contenedor_recursos->manejador_juego->atacarUsuario(&atac);
+            std::cout << "Atacado ..." <<contenedor_recursos->manejador_juego->getUsuarioByIdJson(atac.getIdAtacado()) << std::endl;
         }else if (tipoObjeto == "posUsuario"){
             // Cuando el usuario envia su posición se le retorna las posiciones de los demás jugadores en formato Json
             // se crea objeto PosicionUsuario a partir del Json en formato string 
@@ -96,13 +102,11 @@ void *worker_routine (void *arg)
         }else{
                std::cout << "Json sin identificacion de Objeto "<< std::endl;
         }
-//     //  Do some 'work'
-//     //        sleep(1);
 
         //Conversión de string a stringstream para enviarlo por al red
         std::stringstream lineStream(replyServer);
 
-//     // Conversión de stringstreamer a zmq::message_t
+        // Conversión de stringstreamer a zmq::message_t
         zmq::message_t reply ((void*)lineStream.str().c_str(), lineStream.str().size()+1, NULL);
         socket.send (reply);       
 
