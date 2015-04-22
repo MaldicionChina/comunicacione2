@@ -36,7 +36,7 @@ int Recursos::getUsuariosConectadosJson(std::string* conectadosJson, int idUsuar
 		for(int j = 0; j < usuarios.size(); j++){
 				if(idUsuarioEnviar!=usuarios.at(j)->getIdUsuario()){
 			    	usuarios.at(j)->getPosUsuarioJson(&posJson);
-			    	conectados[j] = posJson;
+			    	conectados["posUsuarios"] = posJson;
 			    }
 			}
 			*conectadosJson = writer.write(conectados);

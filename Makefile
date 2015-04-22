@@ -4,7 +4,7 @@ SRC:=./src
 INC:=./include
 BIN:=./bin
 SHELL := /bin/sh
-LIBS:= -L$(LIB) -lzmq -lUsuario -lJson -lPosicion -lPosicionUsuario -lpthread -lRecursos -lAtaque
+LIBS:= -L$(LIB) -lzmq -lUsuario -lJson -lPosicion -lPosicionUsuario -lpthread -lRecursos -lAtaque -lcurl -lLogin
 INCLUDE:= -I$(INC)
 EXPORT_PATH:=
 CC:= g++ -std=c++11 
@@ -30,7 +30,7 @@ clientZMQ: $(SRC)/clientZeroMQ.cpp makeLibs
 cambioZMQ: $(SRC)/ClienteCambioPos.cpp makeLibs
 	$(CC) $(INCLUDE) $< -o $(BIN)/$@ $(LIBS)
 
-makeLibs: libAtaque.o libRecursos.o libPosicion.o libPosicionUsuario.o  libUsuario.o libJson.o libAtaque.so libPosicion.so libPosicionUsuario.so libUsuario.so libJson.so libRecursos.so
+makeLibs: libAtaque.o libLogin.o libRecursos.o libPosicion.o libPosicionUsuario.o  libUsuario.o libJson.o libLogin.so libAtaque.so libPosicion.so libPosicionUsuario.so libUsuario.so libJson.so libRecursos.so
 
 #Como se usa una libería compartida y no se encuentra en los paths
 #estandar en necesario esportar la variable de entorno LD_LIBRARY_PATH
@@ -46,6 +46,14 @@ libUsuario.o: $(SRC)/Usuario.cpp $(INC)/Usuario.hpp
 libUsuario.so: $(LIB)/libUsuario.o libUsuario.o
 	$(CC) -shared $<  -o $(LIB)/$@
 ##############################Shared Library Usuario######################################
+
+##############################Shared Library Login#########################################
+libLogin.o: $(SRC)/Login.cpp $(INC)/Login.hpp
+	$(CC) $(INCLUDE) -c -fPIC $< -o $(LIB)/$@ 
+
+libLogin.so: $(LIB)/libLogin.o libLogin.o
+	$(CC) -shared $<  -o $(LIB)/$@
+##############################Shared Library Login#########################################
 
 ##############################Shared Library Json#########################################
 libJson.o: $(SRC)/jsoncpp.cpp $(INC)/json/json.h

@@ -54,6 +54,8 @@ int main (int argc, char *argv[])
   Usuario* jugaa = new Usuario(&idJugador,&nombreJugador,&nivelJudador,&vidaJudador
     	,&vidaMaxUsuario,&longitud,&latitud);
   std::string cambioPos = "{\"idUsuario\":"+std::string(argv[1])+",\"latitud\":1,\"longitud\":1}";
+  std::string lixander = "{\"contrasena\":\"12345678\",\"correo\":\"eava745@gmail.com\"}";
+
 
 
    // Se prepara el contexto y el socket para iniciar la comunicación con el servidor
@@ -66,7 +68,7 @@ int main (int argc, char *argv[])
 
       std::this_thread::sleep_for (std::chrono::seconds(3)); // envia la posicion de nuevo
       std::cout << "Cambio de pos" << std::endl;
-      enviarObjetoServer(&socket,"posUsuario",&cambioPos,&reply) ;
+      enviarObjetoServer(&socket,"login",&lixander,&reply) ;
       // std::cout << "Enviado..." << enviarObjetoServer(&socket,"posUsuario",&cambioPos,&reply) << std::endl;
 
       // std::this_thread::sleep_for (std::chrono::seconds(5)); // envia la posicion de nuevo
