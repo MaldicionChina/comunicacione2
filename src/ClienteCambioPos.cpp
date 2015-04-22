@@ -54,6 +54,7 @@ int main (int argc, char *argv[])
   Usuario* jugaa = new Usuario(&idJugador,&nombreJugador,&nivelJudador,&vidaJudador
     	,&vidaMaxUsuario,&longitud,&latitud);
   std::string cambioPos = "{\"idUsuario\":"+std::string(argv[1])+",\"latitud\":1,\"longitud\":1}";
+  std::string cambioPosDOS = "{\"idUsuario\":"+std::string(argv[1])+",\"latitud\":3,\"longitud\":3}";
   std::string lixander = "{\"contrasena\":\"12345678\",\"correo\":\"eava745@gmail.com\"}";
 
 
@@ -65,18 +66,19 @@ int main (int argc, char *argv[])
   socket.connect ("tcp://localhost:5555"); // el socket se connecta
 
   std::cout << "ID jugador: "<< jugaa->getIdUsuario() << std::endl;
+  std::cout << "Login...." << std::endl;
 
-      std::this_thread::sleep_for (std::chrono::seconds(3)); // envia la posicion de nuevo
-      std::cout << "Cambio de pos" << std::endl;
-      enviarObjetoServer(&socket,"login",&lixander,&reply) ;
-      // std::cout << "Enviado..." << enviarObjetoServer(&socket,"posUsuario",&cambioPos,&reply) << std::endl;
+  enviarObjetoServer(&socket,"login",&lixander,&reply) ;
 
-      // std::this_thread::sleep_for (std::chrono::seconds(5)); // envia la posicion de nuevo
-      Ataque ataque(2,3);
+  // enviarObjetoServer(&socket,"posUsuario",&cambioPos,&reply) ;
+  //     // std::cout << "Enviado..." << enviarObjetoServer(&socket,"posUsuario",&cambioPos,&reply) << std::endl;
 
-      std::string atacJson;
-      ataque.ataqueToJson(&atacJson);
-      enviarObjetoServer(&socket,"ataque",&atacJson,&reply) ;
+  //     // std::this_thread::sleep_for (std::chrono::seconds(5)); // envia la posicion de nuevo
+  //  Ataque ataque(2,3);
+
+  //     std::string atacJson;
+  //     ataque.ataqueToJson(&atacJson);
+
 
   delete jugaa;
   return 0;

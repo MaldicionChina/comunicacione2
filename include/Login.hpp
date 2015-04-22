@@ -18,5 +18,7 @@ class Login {
    	std::string getContrasena();
    	void CerrarSesion(int idUsuario);//metodo para destruir la sesion del usuario
    	std::string getLoginJson();
+
+   	std::string confirmarConexion(std::string* jsonLogin);
 };
 #endif

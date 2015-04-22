@@ -116,6 +116,7 @@ void *worker_routine (void *arg)
                     replyServer = "Conexión Exitosa";
                }
                tipoObjetoRespuesta = "usuario";
+
           }else if (tipoObjeto == "ataque"){
               // contenedor_recursos->manejador_juego->atacarUsuario();
               std::cout << "Ataque " << data << std::endl;
@@ -127,8 +128,6 @@ void *worker_routine (void *arg)
               // Cuando el usuario envia su posición se le retorna las posiciones de los demás jugadores en formato Json
               // se crea objeto PosicionUsuario a partir del Json en formato string 
               PosicionUsuario posUser(&data); 
-
-
               // Se actuliza la posición del jugador que envia su posición
               contenedor_recursos->manejador_juego->actualizarPosicionUsuario(&posUser);
               // Se obtiene la lista de jugadores conectados en formato Json
@@ -139,8 +138,10 @@ void *worker_routine (void *arg)
 
           }else if (tipoObjeto == "login"){
               Login logueandose(&data);
-              std::cout << "login " << logueandose.getLoginJson() << std::endl;
               tipoObjetoRespuesta = "login";
+              std::string respuestaLogin;
+              std::cout << "login " << logueandose.getLoginJson() << std::endl;
+              
 
                                   // Consumo de la API Rest
                                 CURL *curl;
@@ -180,7 +181,24 @@ void *worker_routine (void *arg)
                                       curl_easy_cleanup(curl);
                                     }
                                   curl_global_cleanup();
-                                  std::cout << "Get post..."  << response.str() << std::endl;
+                                  respuestaLogin = response.str();
+                                  std::cout << "Get post..."  << respuestaLogin << std::endl;
+                                  std::string dato = logueandose.confirmarConexion(&respuestaLogin);
+                                  if(dato == "NULL")
+                                  {
+                                    replyServer == "Error Login";
+                                  }else{
+                                    Usuario userLogin(&dato);
+                                           std::cout << "Usuario conectado se "  << std::endl;
+                                           if(!contenedor_recursos->manejador_juego->conectar(&userLogin))
+                                           {
+                                                replyServer = "Sorry Full server";
+                                           }else{
+                                           // contenedor_recursos->manejador_juego->getUsuarioById(2);
+                                                userLogin.usuarioToJson(&replyServer);
+                                           }
+                                  }
+
           }else{
                  std::cout << "Json sin identificacion de Objeto "<< std::endl;
                                   tipoObjetoRespuesta = "error";

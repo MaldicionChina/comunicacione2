@@ -36,6 +36,7 @@ public:
     double getLatitud();
     double getLongitud();
 
+    // realiza la conversión del Usuario a objeto Json, retorna el Json por refenencia
     bool usuarioToJson(std::string* usuarioJson);
     bool jsonToUsuario(std::string*);
     double getPosUsuario();

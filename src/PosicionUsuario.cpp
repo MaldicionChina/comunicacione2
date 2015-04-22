@@ -15,11 +15,10 @@ PosicionUsuario::PosicionUsuario(std::string* rpl){
         std::cout  << "Error en la conversión de documento Json a Objeto Json\n"
        << readerJson.getFormattedErrorMessages();
     }
-
     // Se obtiene el valor de cada par "clave":"valor", se convierte a string y luego al correspondiente
-    // tipo de dato
-    latitud =  std::stod(posicion.get("latitud", "Not Found" ).asString()); 
-    longitud = std::stod(posicion.get("longitud", "Not Found" ).asString());
+    // tipo de dato ,-75.5714428
+    latitud =  std::stod(posicion.get("latitud", "\"6.2652965\"" ).asString()); 
+    longitud = std::stod(posicion.get("longitud", "\"-75.5714428\"" ).asString());
     usuario_id = std::stoi(posicion.get("idUsuario", "Not Found" ).asString());
 }
 

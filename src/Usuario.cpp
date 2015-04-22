@@ -84,6 +84,7 @@ Usuario::Usuario(std::string* rpl)
     Json::Value usuario; // Objeto contenedor del documento Json
     std::string posJson; 
     // Se realiza la conversión del archivo Json a Objeto 
+    // std::cout << "rpl..." << *rpl << std::endl;
     if(!readerJson.parse(*rpl,usuario)) // Se verifica que se realice correctamente la conversion
     {
         std::cout  << "Error en la conversión de documento Json a Objeto Json\n"
@@ -91,19 +92,26 @@ Usuario::Usuario(std::string* rpl)
     }
 
     // Se obtiene el valor de cada campo de acuerdo a la clave, en caso de no encontrarse retorna "Not found"
-    idUsuario = std::stoi(usuario.get("idUsuario", "Not Found" ).asString()); 
-    nickName = usuario.get("nickName", "Not Found" ).asString(); 
-    nivelUsuario = std::stoi(usuario.get("nivelUsuario", "Not Found" ).asString()); 
-    vidaUsuario = std::stoi(usuario.get("vidaUsuario", "Not Found" ).asString()); 
-    poderAtaque = std::stoi(usuario.get("poderAtaque", "Not Found" ).asString()); 
-    vidaMaxUsuario = std::stoi(usuario.get("vidaMaxUsuario", "Not Found" ).asString()); 
-    estadoUsuario = usuario.get("estadoUsuario", "null" ).asString();
-    posJson = usuario.get("posUsuario", "Not Found" ).asString(); 
-    posUsuario = new PosicionUsuario(&posJson);
+    idUsuario = std::stoi(usuario.get("idUsuario", "\"1\"" ).asString()); 
+    nickName = usuario.get("nickName", "not" ).asString(); 
+    nivelUsuario = std::stoi(usuario.get("nivelUsuario", "\"1\"" ).asString()); 
+    vidaUsuario = std::stoi(usuario.get("vidaUsuario", "\"1\"" ).asString()); 
     token = usuario.get("token", "null" ).asString();
+    posJson = usuario.get("posUsuario", "null" ).asString(); 
+    if(posJson != "null")
+    {
+        posUsuario = new PosicionUsuario(&posJson);
+    }else{
+        double latitud = 6.2652965;
+        double longitud = -75.5714428;
+        posUsuario = new PosicionUsuario(&latitud,&longitud,&idUsuario);
+        poderAtaque = 3; 
+        vidaMaxUsuario = 100; 
+        estadoUsuario = "vivo";
+    }
 }
 
-// realiza la conversión del Usuario a objeto Json
+// realiza la conversión del Usuario a objeto Json, retorna el Json por refenencia
 bool Usuario::usuarioToJson(std::string* usuarioJson){
     Json::Value root;  // Objeto Json 
     Json::FastWriter writer; // Conversor de objeto Json a formato string 

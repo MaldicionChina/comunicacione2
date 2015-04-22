@@ -16,9 +16,36 @@ Login::Login(std::string* jsonLogin){
 
     }else{
 
-	correo = login.get("correo", "Not Found" ).asString(); ;//id del atacado
+	correo = login.get("correo", "Not Found" ).asString(); //id del atacado
     contrasena = login.get("contrasena", "Not Found" ).asString(); ;//id del atacante
 	}
+}
+
+std::string Login::confirmarConexion(std::string* jsonLogin){
+	Json::Reader readerJson;
+	Json::Value logi;
+	Json::Value datos;
+	std::string error;
+	std::string dataUsuario;
+	Json::FastWriter writer; 
+
+	if(!readerJson.parse(*jsonLogin,logi)) // Se verifica que se realice correctamente la conversion
+    {
+        std::cout  << "Error en la conversión de documento Json a Objeto Json\n" 
+        << readerJson.getFormattedErrorMessages();
+
+    }else{
+    	error = logi.get("error", "Not_Found" ).asString();
+    	if(error == "Not_Found")
+    	{
+    		datos = logi.get("response", "Not Found"); 
+    		dataUsuario = writer.write(datos);
+    		return dataUsuario;
+    		
+     	}
+   	}
+   	return "NULL";
+
 }
 
 std::string Login::getLoginJson(){
